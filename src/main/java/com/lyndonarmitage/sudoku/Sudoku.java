@@ -26,6 +26,7 @@ public class Sudoku {
     public Sudoku(int[][] grid) {
         this.grid = new int[GRID_SIZE][GRID_SIZE];
         // clone the multidimensional array
+        // TODO: Add validation of the grid (will likely need to copy whole thing manually to do this)
         for (int i = 0; i < grid.length; i++)
             this.grid[i] = grid[i].clone();
     }

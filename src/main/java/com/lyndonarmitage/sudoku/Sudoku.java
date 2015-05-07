@@ -5,9 +5,9 @@ package com.lyndonarmitage.sudoku;
  */
 public class Sudoku {
 
-    private static final int BOX_SIZE = 3;
-    private static final int BOX_COUNT = 3;
-    private static final int GRID_SIZE = BOX_SIZE * BOX_COUNT;
+    public static final int BOX_SIZE = 3;
+    public static final int BOX_COUNT = 3;
+    public static final int GRID_SIZE = BOX_SIZE * BOX_COUNT;
     private final int[][] grid;
 
     /**

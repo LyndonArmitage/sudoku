@@ -1,6 +1,5 @@
 package com.lyndonarmitage.sudoku;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -88,15 +87,28 @@ public class SudokuTest {
         System.out.println(sudoku);
     }
 
-    @Ignore
+
     @Test
     public void testIsRowComplete() throws Exception {
-        // TODO: Add test
+        Sudoku sudoku = new Sudoku();
+        int y = 0;
+        assertFalse(sudoku.isRowComplete(y));
+        for (int x = 0; x < Sudoku.GRID_SIZE; x ++) {
+            sudoku.setAbsolute(x, y, x + 1);
+        }
+        assertTrue(sudoku.isRowComplete(y));
+        System.out.println(sudoku);
     }
 
-    @Ignore
     @Test
     public void testIsColumnComplete() throws Exception {
-        // TODO: Add test
+        Sudoku sudoku = new Sudoku();
+        int x = 0;
+        assertFalse(sudoku.isColumnComplete(x));
+        for (int y = 0; y < Sudoku.GRID_SIZE; y ++) {
+            sudoku.setAbsolute(x, y, y + 1);
+        }
+        assertTrue(sudoku.isColumnComplete(x));
+        System.out.println(sudoku);
     }
 }

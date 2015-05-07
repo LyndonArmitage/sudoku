@@ -92,16 +92,16 @@ public class Sudoku {
     }
 
     private void testRelative(int boxX, int boxY, int relX, int relY) throws SudokuException {
-        if (boxX > BOX_COUNT - 1) {
+        if (boxX >= BOX_COUNT) {
             throw new SudokuException(this, "boxX is out of bounds: is " + boxX + ", must be less than " + BOX_COUNT);
         }
-        if (boxY > BOX_COUNT - 1) {
+        if (boxY >= BOX_COUNT) {
             throw new SudokuException(this, "boxY is out of bounds: is " + boxY + ", must be less than " + BOX_COUNT);
         }
-        if (relX > BOX_SIZE - 1) {
+        if (relX >= BOX_SIZE) {
             throw new SudokuException(this, "relX is out of bounds: is " + relX + ", must be less than " + BOX_SIZE);
         }
-        if (relY > BOX_SIZE - 1) {
+        if (relY >= BOX_SIZE) {
             throw new SudokuException(this, "relY is out of bounds: is " + relY + ", must be less than " + BOX_SIZE);
         }
     }
@@ -157,14 +157,14 @@ public class Sudoku {
     public boolean isBoxComplete(int boxX, int boxY) throws SudokuException {
         testRelative(boxX, boxY, 0, 0);
         int count = 0;
-        for (int x = 0; x < GRID_SIZE; x++) {
-            for (int y = 0; y < GRID_SIZE; y++) {
+        for (int x = 0; x < BOX_SIZE; x++) {
+            for (int y = 0; y < BOX_SIZE; y++) {
                 if (getRelative(boxX, boxY, x, y) > 0) {
                     count++;
                 }
             }
         }
-        return (count >= GRID_SIZE * GRID_SIZE);
+        return (count >= BOX_SIZE * BOX_SIZE);
     }
 
     /**

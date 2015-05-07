@@ -3,8 +3,7 @@ package com.lyndonarmitage.sudoku;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by Lyndon on 07/05/2015.
@@ -76,10 +75,17 @@ public class SudokuTest {
         System.out.println(sudoku);
     }
 
-    @Ignore
     @Test
     public void testIsBoxComplete() throws Exception {
-        // TODO: Add test
+        Sudoku sudoku = new Sudoku();
+        assertFalse(sudoku.isBoxComplete(0, 0));
+        for (int x = 0; x < Sudoku.BOX_SIZE; x ++) {
+            for (int y = 0; y < Sudoku.BOX_SIZE; y ++) {
+                sudoku.setRelative(0, 0, x, y, 1);
+            }
+        }
+        assertTrue(sudoku.isBoxComplete(0, 0));
+        System.out.println(sudoku);
     }
 
     @Ignore

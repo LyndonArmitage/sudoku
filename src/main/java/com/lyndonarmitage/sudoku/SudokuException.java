@@ -5,7 +5,7 @@ package com.lyndonarmitage.sudoku;
  */
 public class SudokuException extends Exception {
 
-    public SudokuException(String message) {
-        super(message);
+    public SudokuException(Sudoku sudoku, String message) {
+        super(message + '\n' + sudoku.toString());
     }
 }

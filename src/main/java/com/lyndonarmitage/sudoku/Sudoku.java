@@ -1,5 +1,7 @@
 package com.lyndonarmitage.sudoku;
 
+import java.util.Arrays;
+
 /**
  * Created by Lyndon on 07/05/2015.
  */
@@ -56,13 +58,13 @@ public class Sudoku {
      */
     public void setAbsolute(int x, int y, int value) throws SudokuException {
         if (value < 0 || value > 9) {
-            throw new SudokuException("Value " + value + " is not in range");
+            throw new SudokuException(this, "Value " + value + " is not in range");
         }
         if (x < 0 || x > GRID_SIZE) {
-            throw new SudokuException("x " + x + " is out of bound");
+            throw new SudokuException(this, "x " + x + " is out of bound");
         }
         if (y < 0 || y > GRID_SIZE) {
-            throw new SudokuException("y " + y + " is out of bound");
+            throw new SudokuException(this, "y " + y + " is out of bound");
         }
         this.grid[x][y] = value;
     }
@@ -77,10 +79,10 @@ public class Sudoku {
      */
     public int getAbsolute(int x, int y) throws SudokuException {
         if (x < 0 || x > GRID_SIZE) {
-            throw new SudokuException("x " + x + " is out of bound");
+            throw new SudokuException(this, "x " + x + " is out of bound");
         }
         if (y < 0 || y > GRID_SIZE) {
-            throw new SudokuException("y " + y + " is out of bound");
+            throw new SudokuException(this, "y " + y + " is out of bound");
         }
         return this.grid[x][y];
     }
@@ -91,16 +93,16 @@ public class Sudoku {
 
     private void testRelative(int boxX, int boxY, int relX, int relY) throws SudokuException {
         if (boxX > BOX_COUNT - 1) {
-            throw new SudokuException("boxX is out of bounds: is " + boxX + ", must be less than " + BOX_COUNT);
+            throw new SudokuException(this, "boxX is out of bounds: is " + boxX + ", must be less than " + BOX_COUNT);
         }
         if (boxY > BOX_COUNT - 1) {
-            throw new SudokuException("boxY is out of bounds: is " + boxY + ", must be less than " + BOX_COUNT);
+            throw new SudokuException(this, "boxY is out of bounds: is " + boxY + ", must be less than " + BOX_COUNT);
         }
         if (relX > BOX_SIZE - 1) {
-            throw new SudokuException("relX is out of bounds: is " + relX + ", must be less than " + BOX_SIZE);
+            throw new SudokuException(this, "relX is out of bounds: is " + relX + ", must be less than " + BOX_SIZE);
         }
         if (relY > BOX_SIZE - 1) {
-            throw new SudokuException("relY is out of bounds: is " + relY + ", must be less than " + BOX_SIZE);
+            throw new SudokuException(this, "relY is out of bounds: is " + relY + ", must be less than " + BOX_SIZE);
         }
     }
 
@@ -134,7 +136,7 @@ public class Sudoku {
      */
     public void setRelative(int boxX, int boxY, int relX, int relY, int value) throws SudokuException {
         if (value < 0 || value > 9) {
-            throw new SudokuException("Value " + value + " is not in range");
+            throw new SudokuException(this, "Value " + value + " is not in range");
         }
         testRelative(boxX, boxY, relX, relY);
         int absoluteX, absoluteY;
@@ -197,5 +199,17 @@ public class Sudoku {
             }
         }
         return (count >= GRID_SIZE);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder((GRID_SIZE * GRID_SIZE) + GRID_SIZE);
+        for (int y = 0; y < GRID_SIZE; y ++) {
+            for (int x = 0; x < GRID_SIZE; x ++) {
+                builder.append(this.grid[x][y]);
+            }
+            builder.append('\n');
+        }
+        return builder.toString();
     }
 }

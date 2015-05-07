@@ -1,6 +1,10 @@
 package com.lyndonarmitage.sudoku;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
 /**
  * Created by Lyndon on 07/05/2015.
@@ -31,6 +35,49 @@ public class Sudoku {
         // TODO: Add validation of the grid (will likely need to copy whole thing manually to do this)
         for (int i = 0; i < grid.length; i++)
             this.grid[i] = grid[i].clone();
+    }
+
+    /**
+     * Load Sudoku from a file
+     *
+     * @param sudokuFile The text file to load from
+     * @throws IOException
+     */
+    public Sudoku(File sudokuFile) throws IOException {
+        this.grid = new int[GRID_SIZE][GRID_SIZE];
+        FileInputStream fin = new FileInputStream(sudokuFile);
+        parseString(parseStream(fin));
+        fin.close();
+    }
+
+    /**
+     * Load a sudoku from a generic InputStream (will not close the stream)
+     *
+     * @param sudoku The InputStream
+     */
+    public Sudoku(InputStream sudoku) {
+        this.grid = new int[GRID_SIZE][GRID_SIZE];
+        parseString(parseStream(sudoku));
+    }
+
+    /**
+     * Load the Sudoku from a String
+     *
+     * @param sudoku The string to load from
+     */
+    public Sudoku(String sudoku) {
+        this.grid = new int[GRID_SIZE][GRID_SIZE];
+        parseString(sudoku);
+    }
+
+    private String parseStream(InputStream in) {
+        Scanner scanner = new Scanner(in).useDelimiter("\\A");
+        return scanner.hasNext() ? scanner.next() : "";
+    }
+
+    private void parseString(String sudoku) {
+        // TODO: Add implementation
+        throw new RuntimeException("Not implemented yet");
     }
 
     /**
@@ -176,9 +223,9 @@ public class Sudoku {
      */
     public boolean isRowComplete(int row) {
         int count = 0;
-        for (int x = 0; x < GRID_SIZE; x ++) {
+        for (int x = 0; x < GRID_SIZE; x++) {
             if (this.grid[x][row] > 0) {
-                count ++;
+                count++;
             }
         }
         return (count >= GRID_SIZE);
@@ -193,9 +240,9 @@ public class Sudoku {
      */
     public boolean isColumnComplete(int column) {
         int count = 0;
-        for (int y = 0; y < GRID_SIZE; y ++) {
+        for (int y = 0; y < GRID_SIZE; y++) {
             if (this.grid[column][y] > 0) {
-                count ++;
+                count++;
             }
         }
         return (count >= GRID_SIZE);
@@ -204,8 +251,8 @@ public class Sudoku {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder((GRID_SIZE * GRID_SIZE) + GRID_SIZE);
-        for (int y = 0; y < GRID_SIZE; y ++) {
-            for (int x = 0; x < GRID_SIZE; x ++) {
+        for (int y = 0; y < GRID_SIZE; y++) {
+            for (int x = 0; x < GRID_SIZE; x++) {
                 builder.append(this.grid[x][y]);
             }
             builder.append('\n');

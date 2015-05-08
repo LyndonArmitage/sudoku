@@ -38,6 +38,7 @@ public class SudokuTest {
         tempSudokuFile = new File(".tmp", "test.sudoku");
         logger.info("Creating test file sudoku: {}", tempSudokuFile.getPath());
         if (tempSudokuFile.exists()) {
+            logger.warn("Test file sudoku already exists, deleting");
             tempSudokuFile.delete();
         }
         tempSudokuFile.getParentFile().mkdirs();
@@ -49,6 +50,7 @@ public class SudokuTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+        logger.info("Deleting test file sudoku: {}", tempSudokuFile.getPath());
         tempSudokuFile.delete();
     }
 
@@ -178,6 +180,18 @@ public class SudokuTest {
     public void testParseFile() throws Exception {
         Sudoku sudoku = new Sudoku(tempSudokuFile);
         assertEquals("ParseFile did not work correctly", testSudokuString, sudoku.toString().trim());
+        logger.info("\n{}", sudoku.toString());
+    }
+
+    @Test
+    public void testSolve() throws Exception {
+        Sudoku sudoku = new Sudoku();
+        sudoku.solve(new DummySolver());
+        for (int x = 0; x < Sudoku.GRID_SIZE; x ++) {
+            for (int y = 0; y < Sudoku.GRID_SIZE; y ++) {
+                assertEquals(x + "," + y + " did not match expected output", 1, sudoku.getAbsolute(x, y));
+            }
+        }
         logger.info("\n{}", sudoku.toString());
     }
 }

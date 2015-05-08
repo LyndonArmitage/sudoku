@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 /**
- * Created by Lyndon on 07/05/2015.
+ * Sudoku class <br />
+ * Represents a whole Sudoku with an underlying 2D integer array.<br />
+ * Values of each square should be between 0-9, 0 is a placeholder for empty
  */
 public class Sudoku {
 
@@ -42,6 +44,7 @@ public class Sudoku {
      *
      * @param sudokuFile The text file to load from
      * @throws IOException
+     * @throws SudokuException
      */
     public Sudoku(File sudokuFile) throws IOException, SudokuException {
         parseFile(sudokuFile);
@@ -51,6 +54,7 @@ public class Sudoku {
      * Load a sudoku from a generic InputStream (will not close the stream)
      *
      * @param sudoku The InputStream
+     * @throws SudokuException
      */
     public Sudoku(InputStream sudoku) throws SudokuException {
         parseStream(sudoku);
@@ -60,6 +64,7 @@ public class Sudoku {
      * Load the Sudoku from a String
      *
      * @param sudoku The string to load from
+     * @throws SudokuException
      */
     public Sudoku(String sudoku) throws SudokuException {
         parseString(sudoku);
@@ -85,12 +90,12 @@ public class Sudoku {
         if (rows.length != 9) {
             throw new SudokuException(this, "Couldn't parse String, wrong number of rows. Found " + rows.length + " should be 9");
         }
-        for (int y = 0; y < rows.length; y ++) {
+        for (int y = 0; y < rows.length; y++) {
             String row = rows[y];
             if (row.length() != 9) {
                 throw new SudokuException(this, "Couldn't parse String, wrong number of columns on row " + y + ". Found " + row.length() + " should be 9");
             }
-            for (int x = 0; x < row.length(); x ++) {
+            for (int x = 0; x < row.length(); x++) {
                 int value;
                 String valueStr = row.substring(x, x + 1);
                 try {
@@ -275,8 +280,9 @@ public class Sudoku {
      * Attempt to solve the Sudoku using the given solver.
      *
      * @param solver A class that implements the Solver interface
+     * @throws SudokuException
      */
-    public void solve(SudokuSolver solver) {
+    public void solve(SudokuSolver solver) throws SudokuException {
         solver.solve(this);
     }
 

@@ -3,6 +3,8 @@ package com.lyndonarmitage.sudoku;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,6 +16,8 @@ import static org.junit.Assert.*;
  * Created by Lyndon on 07/05/2015.
  */
 public class SudokuTest {
+
+    private static Logger logger = LoggerFactory.getLogger(SudokuTest.class);
 
     private static final String testSudokuString =
             "003020600\n" +
@@ -32,6 +36,7 @@ public class SudokuTest {
     public static void setUpClass() throws Exception {
         // Write out text to tempSudokuFile file
         tempSudokuFile = new File(".tmp", "test.sudoku");
+        logger.info("Creating test file sudoku: {}", tempSudokuFile.getPath());
         if (tempSudokuFile.exists()) {
             tempSudokuFile.delete();
         }
@@ -55,7 +60,7 @@ public class SudokuTest {
         sudoku.setAbsolute(Sudoku.GRID_SIZE - 1, Sudoku.GRID_SIZE - 1, 1);
         assertEquals(2, sudoku.getHints());
         // TODO: Add test for out of bounds
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -74,7 +79,7 @@ public class SudokuTest {
         }
 
         // TODO: Add test for out of bounds
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -87,7 +92,7 @@ public class SudokuTest {
         assertEquals(1, sudoku.getRelative(0, 0, 0, 0));
         assertEquals(2, sudoku.getRelative(0, 0, 0, 1));
         assertEquals(3, sudoku.getRelative(1, 0, 0, 0));
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -109,7 +114,7 @@ public class SudokuTest {
         assertEquals(2, sudoku.getAbsolute(4, 3));
         assertEquals(1, sudoku.getAbsolute(6, 6));
         assertEquals(2, sudoku.getAbsolute(7, 6));
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -122,7 +127,7 @@ public class SudokuTest {
             }
         }
         assertTrue(sudoku.isBoxComplete(0, 0));
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
 
@@ -135,7 +140,7 @@ public class SudokuTest {
             sudoku.setAbsolute(x, y, x + 1);
         }
         assertTrue(sudoku.isRowComplete(y));
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -147,7 +152,7 @@ public class SudokuTest {
             sudoku.setAbsolute(x, y, y + 1);
         }
         assertTrue(sudoku.isColumnComplete(x));
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -158,7 +163,7 @@ public class SudokuTest {
         // Try to parse it
         Sudoku sudoku = new Sudoku(stream);
         assertEquals("ParseStream did not work correctly", testSudokuString, sudoku.toString().trim());
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
@@ -166,13 +171,13 @@ public class SudokuTest {
         // Parse the String
         Sudoku sudoku = new Sudoku(testSudokuString);
         assertEquals("ParseString did not work correctly", testSudokuString, sudoku.toString().trim());
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 
     @Test
     public void testParseFile() throws Exception {
         Sudoku sudoku = new Sudoku(tempSudokuFile);
         assertEquals("ParseFile did not work correctly", testSudokuString, sudoku.toString().trim());
-        System.out.println(sudoku);
+        logger.info("\n{}", sudoku.toString());
     }
 }

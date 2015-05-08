@@ -76,5 +76,5 @@ crashlytics-build.properties
 
 
 
-resources/
+/resources/
 .tmp/

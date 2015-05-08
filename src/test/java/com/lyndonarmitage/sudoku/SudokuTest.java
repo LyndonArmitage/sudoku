@@ -19,6 +19,7 @@ public class SudokuTest {
 
     private static Logger logger = LoggerFactory.getLogger(SudokuTest.class);
 
+    // @formatter:off
     private static final String testSudokuString =
             "003020600\n" +
             "900305001\n" +
@@ -29,6 +30,19 @@ public class SudokuTest {
             "002609500\n" +
             "800203009\n" +
             "005010300";
+    // @formatter:on
+
+    private static int[][] testArray = {
+            {0, 0, 3, 0, 2, 0, 6, 0, 0},
+            {9, 0, 0, 3, 0, 5, 0, 0, 1},
+            {0, 0, 1, 8, 0, 6, 4, 0, 0},
+            {0, 0, 8, 1, 0, 2, 9, 0, 0},
+            {7, 0, 0, 0, 0, 0, 0, 0, 8},
+            {0, 0, 6, 7, 0, 8, 2, 0, 0},
+            {0, 0, 2, 6, 0, 9, 5, 0, 0},
+            {8, 0, 0, 2, 0, 3, 0, 0, 9},
+            {0, 0, 5, 0, 1, 0, 3, 0, 0}
+    };
 
     private static File tempSudokuFile;
 
@@ -100,14 +114,14 @@ public class SudokuTest {
     @Test
     public void testSetRelative() throws Exception {
         Sudoku sudoku = new Sudoku();
-        sudoku.setRelative(0, 0 ,0, 0, 1);
-        sudoku.setRelative(0, 0 ,1, 0, 2);
-        sudoku.setRelative(1, 0 ,0, 0, 1);
-        sudoku.setRelative(1, 0 ,1, 0, 2);
-        sudoku.setRelative(1, 1 ,0, 0, 1);
-        sudoku.setRelative(1, 1 ,1, 0, 2);
-        sudoku.setRelative(2, 2 ,0, 0, 1);
-        sudoku.setRelative(2, 2 ,1, 0, 2);
+        sudoku.setRelative(0, 0, 0, 0, 1);
+        sudoku.setRelative(0, 0, 1, 0, 2);
+        sudoku.setRelative(1, 0, 0, 0, 1);
+        sudoku.setRelative(1, 0, 1, 0, 2);
+        sudoku.setRelative(1, 1, 0, 0, 1);
+        sudoku.setRelative(1, 1, 1, 0, 2);
+        sudoku.setRelative(2, 2, 0, 0, 1);
+        sudoku.setRelative(2, 2, 1, 0, 2);
         assertEquals(1, sudoku.getAbsolute(0, 0));
         assertEquals(2, sudoku.getAbsolute(1, 0));
         assertEquals(1, sudoku.getAbsolute(3, 0));
@@ -123,8 +137,8 @@ public class SudokuTest {
     public void testIsBoxComplete() throws Exception {
         Sudoku sudoku = new Sudoku();
         assertFalse(sudoku.isBoxComplete(0, 0));
-        for (int x = 0; x < Sudoku.BOX_SIZE; x ++) {
-            for (int y = 0; y < Sudoku.BOX_SIZE; y ++) {
+        for (int x = 0; x < Sudoku.BOX_SIZE; x++) {
+            for (int y = 0; y < Sudoku.BOX_SIZE; y++) {
                 sudoku.setRelative(0, 0, x, y, 1);
             }
         }
@@ -138,7 +152,7 @@ public class SudokuTest {
         Sudoku sudoku = new Sudoku();
         int y = 0;
         assertFalse(sudoku.isRowComplete(y));
-        for (int x = 0; x < Sudoku.GRID_SIZE; x ++) {
+        for (int x = 0; x < Sudoku.GRID_SIZE; x++) {
             sudoku.setAbsolute(x, y, x + 1);
         }
         assertTrue(sudoku.isRowComplete(y));
@@ -150,10 +164,17 @@ public class SudokuTest {
         Sudoku sudoku = new Sudoku();
         int x = 0;
         assertFalse(sudoku.isColumnComplete(x));
-        for (int y = 0; y < Sudoku.GRID_SIZE; y ++) {
+        for (int y = 0; y < Sudoku.GRID_SIZE; y++) {
             sudoku.setAbsolute(x, y, y + 1);
         }
         assertTrue(sudoku.isColumnComplete(x));
+        logger.info("\n{}", sudoku.toString());
+    }
+
+    @Test
+    public void testNewSudokuFromArray() throws Exception {
+        Sudoku sudoku = new Sudoku(testArray);
+        assertEquals("Parsing integer array did not work correctly", testSudokuString, sudoku.toString());
         logger.info("\n{}", sudoku.toString());
     }
 
@@ -187,8 +208,8 @@ public class SudokuTest {
     public void testSolve() throws Exception {
         Sudoku sudoku = new Sudoku();
         sudoku.solve(new DummySolver());
-        for (int x = 0; x < Sudoku.GRID_SIZE; x ++) {
-            for (int y = 0; y < Sudoku.GRID_SIZE; y ++) {
+        for (int x = 0; x < Sudoku.GRID_SIZE; x++) {
+            for (int y = 0; y < Sudoku.GRID_SIZE; y++) {
                 assertEquals(x + "," + y + " did not match expected output", 1, sudoku.getAbsolute(x, y));
             }
         }

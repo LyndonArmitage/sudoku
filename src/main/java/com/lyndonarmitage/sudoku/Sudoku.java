@@ -323,6 +323,62 @@ public class Sudoku {
         return (count >= GRID_SIZE);
     }
 
+    public boolean canPutAbsolute(int x, int y, int value) {
+        // TODO: Add can put value here checker
+        throw new RuntimeException("Not implemented yet");
+    }
+
+    public boolean canPutRelative(int boxX, int boxY, int relX, int relY, int value) {
+        // TODO: Add can put value here (relative) checker
+        throw new RuntimeException("Not implemented yet");
+    }
+
+    public boolean isValid() {
+        // TODO: Add test for Sudoku validity checker
+        for (int y = 0; y < GRID_SIZE; y++) {
+            if (!isRowValid(y)) {
+                return false;
+            }
+        }
+        for (int x = 0; x < GRID_SIZE; x++) {
+            if (!isColumnValid(x)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isRowValid(int row) {
+        // TODO: Add test for Sudoku row validity checker
+        int count = 0;
+        for (int x = 0; x < GRID_SIZE; x++) {
+            if (this.grid[x][row] == 0) {
+                return false;
+            } else {
+                count += this.grid[x][row];
+            }
+        }
+        return count == 45; // 1+2+3+4+5+6+7+8+9=45
+    }
+
+    public boolean isColumnValid(int column) {
+        // TODO: Add test for Sudoku column validity checker
+        int count = 0;
+        for (int y = 0; y < GRID_SIZE; y++) {
+            if (this.grid[column][y] == 0) {
+                return false;
+            } else {
+                count += this.grid[column][y];
+            }
+        }
+        return count == 45; // 1+2+3+4+5+6+7+8+9=45
+    }
+
+    public boolean isBoxValid(int boxX, int boxY) {
+        // TODO: Add Sudoku box validity checker
+        throw new RuntimeException("Not implemented yet");
+    }
+
     /**
      * Attempt to solve the Sudoku using the given solver.
      *

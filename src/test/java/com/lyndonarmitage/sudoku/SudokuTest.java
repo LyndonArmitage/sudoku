@@ -1,6 +1,12 @@
 package com.lyndonarmitage.sudoku;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileWriter;
 
 import static org.junit.Assert.*;
 
@@ -8,6 +14,38 @@ import static org.junit.Assert.*;
  * Created by Lyndon on 07/05/2015.
  */
 public class SudokuTest {
+
+    private static final String testSudokuString =
+            "003020600\n" +
+            "900305001\n" +
+            "001806400\n" +
+            "008102900\n" +
+            "700000008\n" +
+            "006708200\n" +
+            "002609500\n" +
+            "800203009\n" +
+            "005010300";
+
+    private static File tempSudokuFile;
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        // Write out text to tempSudokuFile file
+        tempSudokuFile = new File(".tmp", "test.sudoku");
+        if (tempSudokuFile.exists()) {
+            tempSudokuFile.delete();
+        }
+        tempSudokuFile.getParentFile().mkdirs();
+        tempSudokuFile.createNewFile();
+        FileWriter writer = new FileWriter(tempSudokuFile);
+        writer.write(testSudokuString);
+        writer.close();
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        tempSudokuFile.delete();
+    }
 
     @Test
     public void testGetHints() throws Exception {
@@ -109,6 +147,32 @@ public class SudokuTest {
             sudoku.setAbsolute(x, y, y + 1);
         }
         assertTrue(sudoku.isColumnComplete(x));
+        System.out.println(sudoku);
+    }
+
+    @Test
+    public void testParseStream() throws Exception {
+        // Convert the given string into a stream
+        byte[] bytes = testSudokuString.getBytes();
+        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        // Try to parse it
+        Sudoku sudoku = new Sudoku(stream);
+        assertEquals("ParseStream did not work correctly", testSudokuString, sudoku.toString().trim());
+        System.out.println(sudoku);
+    }
+
+    @Test
+    public void testParseString() throws Exception {
+        // Parse the String
+        Sudoku sudoku = new Sudoku(testSudokuString);
+        assertEquals("ParseString did not work correctly", testSudokuString, sudoku.toString().trim());
+        System.out.println(sudoku);
+    }
+
+    @Test
+    public void testParseFile() throws Exception {
+        Sudoku sudoku = new Sudoku(tempSudokuFile);
+        assertEquals("ParseFile did not work correctly", testSudokuString, sudoku.toString().trim());
         System.out.println(sudoku);
     }
 }

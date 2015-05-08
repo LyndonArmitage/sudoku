@@ -14,13 +14,13 @@ public class Sudoku {
     public static final int BOX_SIZE = 3;
     public static final int BOX_COUNT = 3;
     public static final int GRID_SIZE = BOX_SIZE * BOX_COUNT;
-    private final int[][] grid;
+    private int[][] grid;
 
     /**
      * Initialize empty Sudoku (all values are 0)
      */
     public Sudoku() {
-        grid = new int[GRID_SIZE][GRID_SIZE]; // empty grid
+        this.grid = new int[GRID_SIZE][GRID_SIZE]; // empty grid
     }
 
     /**
@@ -43,11 +43,8 @@ public class Sudoku {
      * @param sudokuFile The text file to load from
      * @throws IOException
      */
-    public Sudoku(File sudokuFile) throws IOException {
-        this.grid = new int[GRID_SIZE][GRID_SIZE];
-        FileInputStream fin = new FileInputStream(sudokuFile);
-        parseString(parseStream(fin));
-        fin.close();
+    public Sudoku(File sudokuFile) throws IOException, SudokuException {
+        parseFile(sudokuFile);
     }
 
     /**
@@ -55,9 +52,8 @@ public class Sudoku {
      *
      * @param sudoku The InputStream
      */
-    public Sudoku(InputStream sudoku) {
-        this.grid = new int[GRID_SIZE][GRID_SIZE];
-        parseString(parseStream(sudoku));
+    public Sudoku(InputStream sudoku) throws SudokuException {
+        parseStream(sudoku);
     }
 
     /**
@@ -65,19 +61,46 @@ public class Sudoku {
      *
      * @param sudoku The string to load from
      */
-    public Sudoku(String sudoku) {
-        this.grid = new int[GRID_SIZE][GRID_SIZE];
+    public Sudoku(String sudoku) throws SudokuException {
         parseString(sudoku);
     }
 
-    private String parseStream(InputStream in) {
-        Scanner scanner = new Scanner(in).useDelimiter("\\A");
-        return scanner.hasNext() ? scanner.next() : "";
+    public void parseFile(File file) throws SudokuException, IOException {
+        FileInputStream fin = new FileInputStream(file);
+        parseStream(fin);
+        fin.close();
     }
 
-    private void parseString(String sudoku) {
-        // TODO: Add implementation
-        throw new RuntimeException("Not implemented yet");
+    public void parseStream(InputStream in) throws SudokuException {
+        Scanner scanner = new Scanner(in).useDelimiter("\\A");
+        parseString(scanner.hasNext() ? scanner.next() : "");
+    }
+
+    public void parseString(String sudoku) throws SudokuException {
+        this.grid = new int[GRID_SIZE][GRID_SIZE];
+        if (sudoku == null || sudoku.length() <= 0) {
+            throw new SudokuException(this, "Cannot parse empty/null string as a Sudoku");
+        }
+        String[] rows = sudoku.split("\\r?\\n");
+        if (rows.length != 9) {
+            throw new SudokuException(this, "Couldn't parse String, wrong number of rows. Found " + rows.length + " should be 9");
+        }
+        for (int y = 0; y < rows.length; y ++) {
+            String row = rows[y];
+            if (row.length() != 9) {
+                throw new SudokuException(this, "Couldn't parse String, wrong number of columns on row " + y + ". Found " + row.length() + " should be 9");
+            }
+            for (int x = 0; x < row.length(); x ++) {
+                int value;
+                String valueStr = row.substring(x, x + 1);
+                try {
+                    value = Integer.parseInt(valueStr);
+                } catch (NumberFormatException e) {
+                    throw new SudokuException(this, "Couldn't parse String, entry at row " + y + " column " + x + " was " + valueStr + " not a number between 0-9");
+                }
+                this.grid[x][y] = value;
+            }
+        }
     }
 
     /**

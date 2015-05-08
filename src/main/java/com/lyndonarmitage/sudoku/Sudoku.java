@@ -31,12 +31,23 @@ public class Sudoku {
      *
      * @param grid A fixed sized (9x9) 2D array representing a Sudoku. Unknown values are 0
      */
-    public Sudoku(int[][] grid) {
+    public Sudoku(int[][] grid) throws SudokuException {
         this.grid = new int[GRID_SIZE][GRID_SIZE];
         // clone the multidimensional array
-        // TODO: Add validation of the grid (will likely need to copy whole thing manually to do this)
-        for (int i = 0; i < grid.length; i++)
-            this.grid[i] = grid[i].clone();
+        if (grid.length != GRID_SIZE) {
+            throw new SudokuException(this, "Couldn't parse array wrong size should be " + GRID_SIZE + " was " + grid.length);
+        }
+
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int y = 0; y < GRID_SIZE; y++) {
+                int value = grid[y][x];
+                if (value < 0 || value > 9) {
+                    throw new SudokuException(this, "Couldn't parse array, entry at row " + y + " column " + x + " was " + value + " not a number between 0-9");
+                }
+                this.grid[x][y] = value;
+            }
+
+        }
     }
 
     /**

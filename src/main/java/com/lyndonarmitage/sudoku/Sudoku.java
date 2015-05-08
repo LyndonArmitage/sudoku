@@ -56,6 +56,7 @@ public class Sudoku {
      * @param sudokuFile The text file to load from
      * @throws IOException
      * @throws SudokuException
+     * @see Sudoku#parseFile(File)
      */
     public Sudoku(File sudokuFile) throws IOException, SudokuException {
         parseFile(sudokuFile);
@@ -66,6 +67,7 @@ public class Sudoku {
      *
      * @param sudoku The InputStream
      * @throws SudokuException
+     * @see Sudoku#parseStream(InputStream)
      */
     public Sudoku(InputStream sudoku) throws SudokuException {
         parseStream(sudoku);
@@ -76,22 +78,56 @@ public class Sudoku {
      *
      * @param sudoku The string to load from
      * @throws SudokuException
+     * @see Sudoku#parseString(String)
      */
     public Sudoku(String sudoku) throws SudokuException {
         parseString(sudoku);
     }
 
+    /**
+     * Parses a Sudoku text file into the internal 2D integer array
+     *
+     * @param file The file to parse
+     * @throws SudokuException
+     * @throws IOException
+     * @see Sudoku#parseString(String)
+     */
     public void parseFile(File file) throws SudokuException, IOException {
         FileInputStream fin = new FileInputStream(file);
         parseStream(fin);
         fin.close();
     }
 
+    /**
+     * Parses a stream of data in as a Sudoku into the internal 2D integer array.
+     *
+     * @param in The sudoku stream
+     * @throws SudokuException
+     * @see Sudoku#parseString(String)
+     */
     public void parseStream(InputStream in) throws SudokuException {
         Scanner scanner = new Scanner(in).useDelimiter("\\A");
         parseString(scanner.hasNext() ? scanner.next() : "");
     }
 
+    /**
+     * Parses a Sudoku string into the internal 2D integer array. <br />
+     * In the form of: <br />
+     * <pre>
+     * 003020600
+     * 900305001
+     * 001806400
+     * 008102900
+     * 700000008
+     * 006708200
+     * 002609500
+     * 800203009
+     * 005010300
+     * </pre>
+     *
+     * @param sudoku The Sudoku string
+     * @throws SudokuException
+     */
     public void parseString(String sudoku) throws SudokuException {
         this.grid = new int[GRID_SIZE][GRID_SIZE];
         if (sudoku == null || sudoku.length() <= 0) {
@@ -297,6 +333,12 @@ public class Sudoku {
         solver.solve(this);
     }
 
+    /**
+     * Returns a string version of the Sudoku that can be parsed by the parseString method
+     *
+     * @return A string version of the Sudoku
+     * @see Sudoku#parseString(String)
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder((GRID_SIZE * GRID_SIZE) + GRID_SIZE);

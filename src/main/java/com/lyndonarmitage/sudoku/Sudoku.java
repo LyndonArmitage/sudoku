@@ -333,7 +333,7 @@ public class Sudoku {
         throw new RuntimeException("Not implemented yet");
     }
 
-    public boolean isValid() {
+    public boolean isValid() throws SudokuException {
         // TODO: Add test for Sudoku validity checker
         for (int y = 0; y < GRID_SIZE; y++) {
             if (!isRowValid(y)) {
@@ -343,6 +343,14 @@ public class Sudoku {
         for (int x = 0; x < GRID_SIZE; x++) {
             if (!isColumnValid(x)) {
                 return false;
+            }
+        }
+        // Not sure if this check is really needed
+        for (int x = 0; x < BOX_SIZE; x++) {
+            for (int y = 0; y < BOX_SIZE; y++) {
+                if(!isBoxValid(x, y)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -374,9 +382,21 @@ public class Sudoku {
         return count == 45; // 1+2+3+4+5+6+7+8+9=45
     }
 
-    public boolean isBoxValid(int boxX, int boxY) {
-        // TODO: Add Sudoku box validity checker
-        throw new RuntimeException("Not implemented yet");
+    public boolean isBoxValid(int boxX, int boxY) throws SudokuException {
+        // TODO: Add test for Sudoku box validity checker
+        testRelative(boxX, boxY, 0, 0);
+        int count = 0;
+        for (int x = 0; x < BOX_SIZE; x++) {
+            for (int y = 0; y < BOX_SIZE; y++) {
+                int value = getRelative(boxX, boxY, x, y);
+                if (value == 0) {
+                    return false;
+                } else {
+                    count += value;
+                }
+            }
+        }
+        return count == 45; // 1+2+3+4+5+6+7+8+9=45
     }
 
     /**

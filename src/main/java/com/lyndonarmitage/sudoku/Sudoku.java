@@ -248,6 +248,15 @@ public class Sudoku {
         return (count >= GRID_SIZE);
     }
 
+    /**
+     * Attempt to solve the Sudoku using the given solver.
+     *
+     * @param solver A class that implements the Solver interface
+     */
+    public void solve(SudokuSolver solver) {
+        solver.solve(this);
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder((GRID_SIZE * GRID_SIZE) + GRID_SIZE);

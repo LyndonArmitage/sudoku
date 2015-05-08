@@ -46,6 +46,7 @@ public class SudokuTest {
 
     private static File tempSudokuFile;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @BeforeClass
     public static void setUpClass() throws Exception {
         // Write out text to tempSudokuFile file
@@ -62,6 +63,7 @@ public class SudokuTest {
         writer.close();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @AfterClass
     public static void tearDownClass() throws Exception {
         logger.info("Deleting test file sudoku: {}", tempSudokuFile.getPath());

@@ -293,7 +293,9 @@ public class Sudoku {
             for (int x = 0; x < GRID_SIZE; x++) {
                 builder.append(this.grid[x][y]);
             }
-            builder.append('\n');
+            if (y < GRID_SIZE - 1) {
+                builder.append('\n');
+            }
         }
         return builder.toString();
     }

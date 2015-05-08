@@ -164,7 +164,7 @@ public class SudokuTest {
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
         // Try to parse it
         Sudoku sudoku = new Sudoku(stream);
-        assertEquals("ParseStream did not work correctly", testSudokuString, sudoku.toString().trim());
+        assertEquals("ParseStream did not work correctly", testSudokuString, sudoku.toString());
         logger.info("\n{}", sudoku.toString());
     }
 
@@ -172,14 +172,14 @@ public class SudokuTest {
     public void testParseString() throws Exception {
         // Parse the String
         Sudoku sudoku = new Sudoku(testSudokuString);
-        assertEquals("ParseString did not work correctly", testSudokuString, sudoku.toString().trim());
+        assertEquals("ParseString did not work correctly", testSudokuString, sudoku.toString());
         logger.info("\n{}", sudoku.toString());
     }
 
     @Test
     public void testParseFile() throws Exception {
         Sudoku sudoku = new Sudoku(tempSudokuFile);
-        assertEquals("ParseFile did not work correctly", testSudokuString, sudoku.toString().trim());
+        assertEquals("ParseFile did not work correctly", testSudokuString, sudoku.toString());
         logger.info("\n{}", sudoku.toString());
     }
 

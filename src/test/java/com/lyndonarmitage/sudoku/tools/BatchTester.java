@@ -3,7 +3,7 @@ package com.lyndonarmitage.sudoku.tools;
 import com.lyndonarmitage.sudoku.Sudoku;
 import com.lyndonarmitage.sudoku.SudokuException;
 import com.lyndonarmitage.sudoku.SudokuSolver;
-import com.lyndonarmitage.sudoku.solvers.LogicSolver;
+import com.lyndonarmitage.sudoku.solvers.SimpleLogicSolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +44,15 @@ public class BatchTester {
             switch (args[2].toLowerCase()) {
                 case "logic":
                     logger.info("Using logic solver");
-                    solver = new LogicSolver();
+                    solver = new SimpleLogicSolver();
                     break;
                 default:
                     logger.warn("Using default logic solver");
-                    solver = new LogicSolver();
+                    solver = new SimpleLogicSolver();
             }
         } else {
             logger.warn("Using default logic solver");
-            solver = new LogicSolver();
+            solver = new SimpleLogicSolver();
         }
 
         File[] sudokuFiles = null;

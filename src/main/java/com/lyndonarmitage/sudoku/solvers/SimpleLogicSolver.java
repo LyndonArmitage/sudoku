@@ -15,8 +15,8 @@ import java.util.Set;
 /**
  * Created by Lyndon on 09/05/2015.
  */
-public class LogicSolver implements SudokuSolver {
-    private static final Logger logger = LoggerFactory.getLogger(LogicSolver.class);
+public class SimpleLogicSolver implements SudokuSolver {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleLogicSolver.class);
 
     public static void main(String[] args) throws IOException, SudokuException {
         File file = null;
@@ -36,7 +36,7 @@ public class LogicSolver implements SudokuSolver {
         Sudoku sudoku = new Sudoku(file);
         System.out.println("Loaded Sudoku: ");
         System.out.println(sudoku.toString());
-        sudoku.solve(new LogicSolver());
+        sudoku.solve(new SimpleLogicSolver());
         System.out.println("Solved Sudoku: ");
         System.out.println(sudoku.toString());
     }

@@ -286,9 +286,27 @@ public class SudokuTest {
         }
     }
 
-    @Ignore
     @Test
     public void testCanPutRelative() throws Exception {
+        int [][] box;
+        int [][] invalidBox;
+        for(int boxX = 0; boxX < 3; boxX ++) {
+            for(int boxY = 0; boxY < 3;boxY ++) {
+                invalidBox = invalidSudoku.getBox(boxX, boxY);
+                box = validSudoku.getBox(boxX, boxY);
+                for(int relX = 0; relX < 3; relX ++) {
+                    for (int relY = 0; relY < 3; relY++) {
+                        assertFalse(all1sSudoku.canPutRelative(boxX, boxY, relX, relY, box[relY][relX]));
+                        if(invalidBox[relY][relX] != 0) {
+                            assertFalse(invalidSudoku.canPutRelative(boxX, boxY, relX, relY, box[relY][relX]));
+                        }
+                        else {
+                            assertTrue(invalidSudoku.canPutRelative(boxX, boxY, relX, relY, box[relY][relX]));
+                        }
+                    }
+                }
+            }
+        }
 
     }
 

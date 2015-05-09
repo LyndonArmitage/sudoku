@@ -2,7 +2,6 @@ package com.lyndonarmitage.sudoku;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,7 @@ public class SudokuTest {
     private static Logger logger = LoggerFactory.getLogger(SudokuTest.class);
 
     // @formatter:off
-    private static final String testSudokuString =
+    public static final String testSudokuString =
             "003020600\n" +
             "900305001\n" +
             "001806400\n" +
@@ -33,7 +32,7 @@ public class SudokuTest {
             "005010300";
     // @formatter:on
 
-    private static final int[][] testArray = {
+    public static final int[][] testArray = {
             {0, 0, 3, 0, 2, 0, 6, 0, 0},
             {9, 0, 0, 3, 0, 5, 0, 0, 1},
             {0, 0, 1, 8, 0, 6, 4, 0, 0},
@@ -45,7 +44,7 @@ public class SudokuTest {
             {0, 0, 5, 0, 1, 0, 3, 0, 0}
     };
 
-    private static final int[][] testArrayCompleted = {
+    public static final int[][] testArrayCompleted = {
             {4, 8, 3, 9, 2, 1, 6, 5, 7},
             {9, 6, 7, 3, 4, 5, 8, 2, 1},
             {2, 5, 1, 8, 7, 6, 4, 9, 3},
@@ -288,19 +287,18 @@ public class SudokuTest {
 
     @Test
     public void testCanPutRelative() throws Exception {
-        int [][] box;
-        int [][] invalidBox;
-        for(int boxX = 0; boxX < 3; boxX ++) {
-            for(int boxY = 0; boxY < 3;boxY ++) {
+        int[][] box;
+        int[][] invalidBox;
+        for (int boxX = 0; boxX < 3; boxX++) {
+            for (int boxY = 0; boxY < 3; boxY++) {
                 invalidBox = invalidSudoku.getBox(boxX, boxY);
                 box = validSudoku.getBox(boxX, boxY);
-                for(int relX = 0; relX < 3; relX ++) {
+                for (int relX = 0; relX < 3; relX++) {
                     for (int relY = 0; relY < 3; relY++) {
                         assertFalse(all1sSudoku.canPutRelative(boxX, boxY, relX, relY, box[relY][relX]));
-                        if(invalidBox[relY][relX] != 0) {
+                        if (invalidBox[relY][relX] != 0) {
                             assertFalse(invalidSudoku.canPutRelative(boxX, boxY, relX, relY, box[relY][relX]));
-                        }
-                        else {
+                        } else {
                             assertTrue(invalidSudoku.canPutRelative(boxX, boxY, relX, relY, box[relY][relX]));
                         }
                     }

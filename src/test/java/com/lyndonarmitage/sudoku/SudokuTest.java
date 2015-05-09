@@ -2,6 +2,7 @@ package com.lyndonarmitage.sudoku;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,24 @@ public class SudokuTest {
             {0, 0, 5, 0, 1, 0, 3, 0, 0}
     };
 
+    private static final int[][] testArrayCompleted = {
+            {4, 8, 3, 9, 2, 1, 6, 5, 7},
+            {9, 6, 7, 3, 4, 5, 8, 2, 1},
+            {2, 5, 1, 8, 7, 6, 4, 9, 3},
+            {5, 4, 8, 1, 3, 2, 9, 7, 6},
+            {7, 2, 9, 5, 6, 4, 1, 3, 8},
+            {1, 3, 6, 7, 9, 8, 2, 4, 5},
+            {3, 7, 2, 6, 8, 9, 5, 1, 4},
+            {8, 1, 4, 2, 5, 3, 7, 6, 9},
+            {6, 9, 5, 4, 1, 7, 3, 8, 2}
+    };
+
     private static File tempSudokuFile;
+    private static Sudoku invalidSudoku1;
+    private static Sudoku validRowsSudoku;
+    private static Sudoku validColumnsSudoku;
+    private static Sudoku all1sSudoku;
+    private static Sudoku validSudoku;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @BeforeClass
@@ -61,6 +79,21 @@ public class SudokuTest {
         FileWriter writer = new FileWriter(tempSudokuFile);
         writer.write(testSudokuString);
         writer.close();
+
+        logger.info("Loading valid and invalid Sudokus");
+        invalidSudoku1 = new Sudoku(testArray);
+        validRowsSudoku = new Sudoku();
+        validColumnsSudoku = new Sudoku();
+        all1sSudoku = new Sudoku();
+        for(int y = 0; y < Sudoku.GRID_SIZE; y++) {
+            for(int x = 0; x < Sudoku.GRID_SIZE; x++) {
+                validRowsSudoku.setAbsolute(x, y, x + 1);
+                validColumnsSudoku.setAbsolute(x, y, y + 1);
+                all1sSudoku.setAbsolute(x, y, 1);
+            }
+
+        }
+        validSudoku = new Sudoku(testArrayCompleted);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -216,5 +249,61 @@ public class SudokuTest {
             }
         }
         logger.info("\n{}", sudoku.toString());
+    }
+
+    @Ignore
+    @Test
+    public void testCanPutAbsolute() throws Exception {
+
+    }
+
+    @Ignore
+    @Test
+    public void testCanPutRelative() throws Exception {
+
+    }
+
+    @Test
+    public void testIsValid() throws Exception {
+        assertFalse("Sudoku should be invalid", invalidSudoku1.isValid());
+        assertFalse("Sudoku should be invalid", validRowsSudoku.isValid());
+        assertFalse("Sudoku should be invalid", all1sSudoku.isValid());
+        assertTrue("Sudoku should be valid", validSudoku.isValid());
+    }
+
+    @Test
+    public void testIsRowValid() throws Exception {
+        for (int i = 0; i < Sudoku.GRID_SIZE; i++) {
+            assertFalse("Row " + i + " should be invalid", invalidSudoku1.isRowValid(i));
+            assertTrue("Row " + i + " should be valid", validRowsSudoku.isRowValid(i));
+            assertFalse("Row " + i + " should be invalid \n" + validColumnsSudoku.toString(), validColumnsSudoku.isRowValid(i));
+            assertFalse("Row " + i + " should be invalid", all1sSudoku.isRowValid(i));
+            assertTrue("Row " + i + " should be valid", validSudoku.isRowValid(i));
+        }
+    }
+
+    @Test
+    public void testIsColumnValid() throws Exception {
+        for (int i = 0; i < Sudoku.GRID_SIZE; i++) {
+            assertFalse("Column " + i + " should be invalid", invalidSudoku1.isColumnValid(i));
+            assertFalse("Column " + i + " should be invalid", validRowsSudoku.isColumnValid(i));
+            assertFalse("Column " + i + " should be invalid", all1sSudoku.isColumnValid(i));
+            assertTrue("Column " + i + " should be valid", validColumnsSudoku.isColumnValid(i));
+            assertTrue("Column " + i + " should be valid", validSudoku.isColumnValid(i));
+        }
+    }
+
+    @Test
+    public void testIsBoxValid() throws Exception {
+        for (int x = 0; x < Sudoku.BOX_SIZE; x++) {
+            for (int y = 0; y < Sudoku.BOX_SIZE; y++) {
+                assertFalse("Box " + x + "," + y + " should be invalid", invalidSudoku1.isBoxValid(x, y));
+                assertFalse("Box " + x + "," + y + " should be invalid", validRowsSudoku.isBoxValid(x, y));
+                assertFalse("Box " + x + "," + y + " should be invalid", validColumnsSudoku.isBoxValid(x, y));
+                assertFalse("Box " + x + "," + y + " should be invalid", all1sSudoku.isBoxValid(x, y));
+                assertTrue("Box " + x + "," + y + " should be valid", validSudoku.isBoxValid(x, y));
+            }
+        }
+
     }
 }

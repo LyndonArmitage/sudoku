@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Sudoku class <br />
@@ -334,7 +336,6 @@ public class Sudoku {
     }
 
     public boolean isValid() throws SudokuException {
-        // TODO: Add test for Sudoku validity checker
         for (int y = 0; y < GRID_SIZE; y++) {
             if (!isRowValid(y)) {
                 return false;
@@ -357,46 +358,43 @@ public class Sudoku {
     }
 
     public boolean isRowValid(int row) {
-        // TODO: Add test for Sudoku row validity checker
-        int count = 0;
+        Set<Integer> set = new HashSet<>(9);
         for (int x = 0; x < GRID_SIZE; x++) {
             if (this.grid[x][row] == 0) {
                 return false;
             } else {
-                count += this.grid[x][row];
+                set.add(this.grid[x][row]);
             }
         }
-        return count == 45; // 1+2+3+4+5+6+7+8+9=45
+        return set.size() == 9;
     }
 
     public boolean isColumnValid(int column) {
-        // TODO: Add test for Sudoku column validity checker
-        int count = 0;
+        Set<Integer> set = new HashSet<>(9);
         for (int y = 0; y < GRID_SIZE; y++) {
             if (this.grid[column][y] == 0) {
                 return false;
             } else {
-                count += this.grid[column][y];
+                set.add(this.grid[column][y]);
             }
         }
-        return count == 45; // 1+2+3+4+5+6+7+8+9=45
+        return set.size() == 9;
     }
 
     public boolean isBoxValid(int boxX, int boxY) throws SudokuException {
-        // TODO: Add test for Sudoku box validity checker
         testRelative(boxX, boxY, 0, 0);
-        int count = 0;
+        Set<Integer> set = new HashSet<>(9);
         for (int x = 0; x < BOX_SIZE; x++) {
             for (int y = 0; y < BOX_SIZE; y++) {
                 int value = getRelative(boxX, boxY, x, y);
                 if (value == 0) {
                     return false;
                 } else {
-                    count += value;
+                    set.add(value);
                 }
             }
         }
-        return count == 45; // 1+2+3+4+5+6+7+8+9=45
+        return set.size() == 9;
     }
 
     /**

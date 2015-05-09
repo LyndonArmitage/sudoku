@@ -53,25 +53,32 @@ public class SplitterTool {
                 String line = null;
                 boolean begun = false;
                 int count = 0;
+                int lineNumber = 1;
+                int sudokuCount = 0;
                 while ((line = in.readLine()) != null) {
+                    if (begun && count >= lineAfter) {
+                        begun = false;
+                        sudokus.add(builder.toString());
+                    }
                     if (!begun) {
                         if (line.matches(beginPattern)) {
+                            sudokuCount++;
                             begun = true;
                             count = 0;
                             builder = new StringBuilder((9 * 9) + 8);
+                            logger.info("Begun {} at line number {}", sudokuCount, lineNumber);
                         }
                     } else {
-                        count++;
-                        if (count > lineAfter) {
-                            begun = false;
-                            sudokus.add(builder.toString());
-                        } else {
-                            if (count > 1) {
-                                builder.append('\n');
-                            }
-                            builder.append(line);
+                        if (count > 0) {
+                            builder.append('\n');
                         }
+                        builder.append(line);
+                        count++;
                     }
+                    lineNumber++;
+                }
+                if (begun && count >= lineAfter) {
+                    sudokus.add(builder.toString());
                 }
 
             } catch (FileNotFoundException e) {

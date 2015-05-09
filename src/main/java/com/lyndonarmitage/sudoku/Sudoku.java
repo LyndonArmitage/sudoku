@@ -73,6 +73,16 @@ public class Sudoku {
     }
 
     /**
+     * Gets a reference to the internal 2D array.<br />
+     * <b>Warning:</b> Doesn't run any kind of validation. Should only be used when speed is of concern
+     *
+     * @return a reference to the internal 2D array
+     */
+    public int[][] getGrid() {
+        return grid;
+    }
+
+    /**
      * Parses a Sudoku as a 2D array.
      * The given array will be validated and copied into the new Sudoku
      *

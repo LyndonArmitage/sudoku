@@ -338,6 +338,50 @@ public class Sudoku {
     }
 
     /**
+     * Get a copy of the column
+     *
+     * @param column column to copy
+     * @return a copy of the column
+     */
+    public int[] getColumn(int column) {
+        int[] contents = new int[GRID_SIZE];
+        for (int y = 0; y < GRID_SIZE; y++) {
+            contents[y] = this.grid[y][column];
+        }
+        return contents;
+    }
+
+    /**
+     * Get a copy of the row
+     *
+     * @param row row to copy
+     * @return a copy of the row
+     */
+    public int[] getRow(int row) {
+        return this.grid[row].clone();
+    }
+
+    /**
+     * Get a copy of the box
+     *
+     * @param boxX Box x (0,1,2)
+     * @param boxY Box y (0,1,2)
+     * @return a copy of the box
+     * @throws SudokuException
+     */
+    public int[][] getBox(int boxX, int boxY) throws SudokuException {
+        testRelative(boxX, boxY, 0, 0);
+        int[][] box = new int[BOX_SIZE][BOX_SIZE];
+        for (int x = 0; x < BOX_SIZE; x++) {
+            for (int y = 0; y < BOX_SIZE; y++) {
+                int value = getRelative(boxX, boxY, x, y);
+                box[x][y] = value;
+            }
+        }
+        return box;
+    }
+
+    /**
      * Check to make sure that the given x and y isn't occupied.
      *
      * @param x absolute x
@@ -357,10 +401,37 @@ public class Sudoku {
      * @param value value to place there
      * @return false if the space is occupied or putting the value there is an invalid move
      */
-    public boolean canPutAbsolute(int x, int y, int value) {
+    public boolean canPutAbsolute(int x, int y, int value) throws SudokuException {
         // TODO: Add test
-        if (canPutAbsolute(x, y)) {
-            throw new RuntimeException("Not yet implemented");
+        if (canPutAbsolute(x, y) && value > 0 && value <= 9) {
+            int[] row = getRow(y);
+            int[] column = getColumn(x);
+            //Set<Integer> present = new HashSet<>(9);
+            for (int i = 0; i < 9; i++) {
+                if (row[i] != 0) {
+                    if (row[i] == value) {
+                        return false; // early bailout
+                    }
+                    //present.add(row[i]);
+                }
+                if (column[i] != 0) {
+                    if (column[i] == value) {
+                        return false; // early bailout
+                    }
+                    //present.add(column[i]);
+                }
+            }
+            // convert x, y to get boxX, boxY
+            int[][] box = getBox(x / BOX_SIZE, y / BOX_SIZE);
+            for (int xPos = 0; xPos < BOX_SIZE; xPos++) {
+                for (int yPos = 0; yPos < BOX_SIZE; yPos++) {
+                    if (box[xPos][yPos] == value) {
+                        return false; // early bailout
+                    }
+                    //present.add(box[xPos][yPos]);
+                }
+            }
+            return true;
         } else {
             return false;
         }
@@ -394,8 +465,8 @@ public class Sudoku {
      */
     public boolean canPutRelative(int boxX, int boxY, int relX, int relY, int value) throws SudokuException {
         // TODO: Add test
-        if (canPutRelative(boxX, boxY, relX, relY)) {
-            throw new RuntimeException("Not yet implemented");
+        if (canPutRelative(boxX, boxY, relX, relY) && value > 0 && value <= 9) {
+            return canPutAbsolute(convertRelativeToAbsolute(boxX, relX), convertRelativeToAbsolute(boxY, relY), value);
         } else {
             return false;
         }

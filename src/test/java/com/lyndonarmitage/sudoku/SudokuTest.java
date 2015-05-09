@@ -331,4 +331,40 @@ public class SudokuTest {
     public void testToString() throws Exception {
         assertEquals("Sudoku strings do not match", testSudokuString, invalidSudoku.toString());
     }
+
+    @Test
+    public void testGetColumn() throws Exception {
+        int column = 0;
+        int[] expected1 = new int[9];
+        int[] expected2 = new int[9];
+        for (int y = 0; y < 9; y++) {
+            expected1[y] = testArray[y][column];
+            expected2[y] = testArrayCompleted[y][column];
+        }
+        assertArrayEquals(expected1, invalidSudoku.getColumn(0));
+        assertArrayEquals(expected2, validSudoku.getColumn(0));
+    }
+
+    @Test
+    public void testGetRow() throws Exception {
+        int[] expected1 = testArray[0];
+        int[] expected2 = testArrayCompleted[0];
+        assertArrayEquals(expected1, invalidSudoku.getRow(0));
+        assertArrayEquals(expected2, validSudoku.getRow(0));
+    }
+
+    @Test
+    public void testGetBox() throws Exception {
+        int[][] expected1 = new int[3][3];
+        int[][] expected2 = new int[3][3];
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                expected1[x][y] = testArray[y][x];
+                expected2[x][y] = testArrayCompleted[y][x];
+                // not sure of correct
+            }
+        }
+        assertArrayEquals(expected1, invalidSudoku.getBox(0, 0));
+        assertArrayEquals(expected2, validSudoku.getBox(0, 0));
+    }
 }

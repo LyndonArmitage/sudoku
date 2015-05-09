@@ -344,11 +344,7 @@ public class Sudoku {
      * @return a copy of the column
      */
     public int[] getColumn(int column) {
-        int[] contents = new int[GRID_SIZE];
-        for (int y = 0; y < GRID_SIZE; y++) {
-            contents[y] = this.grid[y][column];
-        }
-        return contents;
+        return this.grid[column].clone();
     }
 
     /**
@@ -358,7 +354,11 @@ public class Sudoku {
      * @return a copy of the row
      */
     public int[] getRow(int row) {
-        return this.grid[row].clone();
+        int[] contents = new int[GRID_SIZE];
+        for (int y = 0; y < GRID_SIZE; y++) {
+            contents[y] = this.grid[y][row];
+        }
+        return contents;
     }
 
     /**

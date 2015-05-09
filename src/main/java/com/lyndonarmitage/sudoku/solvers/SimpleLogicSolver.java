@@ -49,9 +49,9 @@ public class SimpleLogicSolver implements SudokuSolver {
         do {
             lastChanges = 0;
             for (int x = 0; x < 9; x++) {
+                int[] column = sudoku.getColumn(x);
                 for (int y = 0; y < 9; y++) {
                     int[] row = sudoku.getRow(y);
-                    int[] column = sudoku.getColumn(x);
                     Set<Integer> present = new HashSet<>(9);
                     for (int i = 0; i < 9; i++) {
                         if (row[i] != 0) {

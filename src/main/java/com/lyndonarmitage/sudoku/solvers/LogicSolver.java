@@ -17,7 +17,6 @@ import java.util.Set;
  */
 public class LogicSolver implements SudokuSolver {
     private static final Logger logger = LoggerFactory.getLogger(LogicSolver.class);
-    private SimpleLogicSolver simpleSolver = new SimpleLogicSolver();
     private PencilMark[][] pencilMarks;
 
     public static void main(String[] args) throws IOException, SudokuException {
@@ -45,14 +44,8 @@ public class LogicSolver implements SudokuSolver {
 
     @Override
     public void solve(Sudoku sudoku) throws SudokuException {
-        logger.info("Attempting so solve sudoku with {} first", simpleSolver.getClass().getCanonicalName());
-        sudoku.solve(simpleSolver);
-        if (sudoku.getHints() < 81) {
-            logger.info("Failed to solve sudoku with {}", simpleSolver.getClass().getCanonicalName());
-            initPencilMarks(sudoku); // init the pencilMarks array now as we haven't solve the sudoku yet
-            solveWithPencilMarks(sudoku);
-        }
-
+        initPencilMarks(sudoku); // init the pencilMarks array now as we haven't solve the sudoku yet
+        solveWithPencilMarks(sudoku);
     }
 
     /**
@@ -63,43 +56,55 @@ public class LogicSolver implements SudokuSolver {
      * @throws SudokuException
      * @see LogicSolver#initPencilMarks(Sudoku)
      */
-    public void solveWithPencilMarks(Sudoku sudoku) throws SudokuException {
-        for (int x = 0; x < 9; x++) {
-            int[] column = sudoku.getColumn(x);
-            for (int y = 0; y < 9; y++) {
-                PencilMark mark = pencilMarks[x][y];
-                if (sudoku.getAbsolute(x, y) == 0) {
-                    int[] row = sudoku.getRow(y);
+    private void solveWithPencilMarks(Sudoku sudoku) throws SudokuException {
+        int lastChanges; // count of how many changes were done in the last iteration
+        long startTime = System.currentTimeMillis();
+        do {
+            lastChanges = 0;
+            // perform basic logical steps
+            for (int x = 0; x < 9; x++) {
+                int[] column = sudoku.getColumn(x);
+                for (int y = 0; y < 9; y++) {
+                    PencilMark mark = pencilMarks[x][y];
+                    if (sudoku.getAbsolute(x, y) == 0) {
+                        int[] row = sudoku.getRow(y);
 
-                    // remove all the ones already present
-                    for (int i = 0; i < 9; i++) {
-                        mark.remove(row[i]);
-                        mark.remove(column[i]);
-                    }
-                    if (mark.getRealValue() > 0) {
-                        // we have worked out a value from the column and row alone
-                        sudoku.setAbsolute(x, y, mark.getRealValue());
-                    } else {
-
-                        // convert x, y to get boxX, boxY and check the box it is in to limit possibilities further
-                        int[][] box = sudoku.getBox(x / Sudoku.BOX_SIZE, y / Sudoku.BOX_SIZE);
-                        for (int xPos = 0; xPos < Sudoku.BOX_SIZE; xPos++) {
-                            for (int yPos = 0; yPos < Sudoku.BOX_SIZE; yPos++) {
-                                mark.remove(box[xPos][yPos]);
-                            }
+                        // remove all the ones already present
+                        for (int i = 0; i < 9; i++) {
+                            mark.remove(row[i]);
+                            mark.remove(column[i]);
                         }
                         if (mark.getRealValue() > 0) {
-                            // we have worked out a value by covering the column, row, and box
+                            // we have worked out a value from the column and row alone
                             sudoku.setAbsolute(x, y, mark.getRealValue());
+                            lastChanges++;
+                        } else {
+
+                            // convert x, y to get boxX, boxY and check the box it is in to limit possibilities further
+                            int[][] box = sudoku.getBox(x / Sudoku.BOX_SIZE, y / Sudoku.BOX_SIZE);
+                            for (int xPos = 0; xPos < Sudoku.BOX_SIZE; xPos++) {
+                                for (int yPos = 0; yPos < Sudoku.BOX_SIZE; yPos++) {
+                                    mark.remove(box[xPos][yPos]);
+                                }
+                            }
+                            if (mark.getRealValue() > 0) {
+                                // we have worked out a value by covering the column, row, and box
+                                sudoku.setAbsolute(x, y, mark.getRealValue());
+                                lastChanges++;
+                            }
                         }
+                        // at this point we have covered the basics in the same way SimpleLogicSolver does
+                    } else if (mark.size() > 1) {
+                        mark = new PencilMark(sudoku.getAbsolute(x, y));
+                        pencilMarks[x][y] = mark;
                     }
-                    // at this point we have covered the basics in the same way SimpleLogicSolver does
-                } else if (mark.size() > 1) {
-                    mark = new PencilMark(sudoku.getAbsolute(x, y));
-                    pencilMarks[x][y] = mark;
                 }
             }
+        } while (lastChanges > 0);
+        if (sudoku.getHints() < 81) {
+            logger.warn("Couldn't completely finish Sudoku, {} incomplete sections.", (81 - sudoku.getHints()));
         }
+        logger.debug("Took {}ms", System.currentTimeMillis() - startTime);
     }
 
     /**

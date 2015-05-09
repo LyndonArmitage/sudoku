@@ -58,7 +58,7 @@ public class SudokuTest {
     };
 
     private static File tempSudokuFile;
-    private static Sudoku invalidSudoku1;
+    private static Sudoku invalidSudoku;
     private static Sudoku validRowsSudoku;
     private static Sudoku validColumnsSudoku;
     private static Sudoku all1sSudoku;
@@ -81,7 +81,7 @@ public class SudokuTest {
         writer.close();
 
         logger.info("Loading valid and invalid Sudokus");
-        invalidSudoku1 = new Sudoku(testArray);
+        invalidSudoku = new Sudoku(testArray);
         validRowsSudoku = new Sudoku();
         validColumnsSudoku = new Sudoku();
         all1sSudoku = new Sudoku();
@@ -207,7 +207,7 @@ public class SudokuTest {
     }
 
     @Test
-    public void testNewSudokuFromArray() throws Exception {
+    public void testParseArray() throws Exception {
         Sudoku sudoku = new Sudoku(testArray);
         assertEquals("Parsing integer array did not work correctly", testSudokuString, sudoku.toString());
         logger.info("\n{}", sudoku.toString());
@@ -265,7 +265,7 @@ public class SudokuTest {
 
     @Test
     public void testIsValid() throws Exception {
-        assertFalse("Sudoku should be invalid", invalidSudoku1.isValid());
+        assertFalse("Sudoku should be invalid", invalidSudoku.isValid());
         assertFalse("Sudoku should be invalid", validRowsSudoku.isValid());
         assertFalse("Sudoku should be invalid", all1sSudoku.isValid());
         assertTrue("Sudoku should be valid", validSudoku.isValid());
@@ -274,7 +274,7 @@ public class SudokuTest {
     @Test
     public void testIsRowValid() throws Exception {
         for (int i = 0; i < Sudoku.GRID_SIZE; i++) {
-            assertFalse("Row " + i + " should be invalid", invalidSudoku1.isRowValid(i));
+            assertFalse("Row " + i + " should be invalid", invalidSudoku.isRowValid(i));
             assertTrue("Row " + i + " should be valid", validRowsSudoku.isRowValid(i));
             assertFalse("Row " + i + " should be invalid \n" + validColumnsSudoku.toString(), validColumnsSudoku.isRowValid(i));
             assertFalse("Row " + i + " should be invalid", all1sSudoku.isRowValid(i));
@@ -285,7 +285,7 @@ public class SudokuTest {
     @Test
     public void testIsColumnValid() throws Exception {
         for (int i = 0; i < Sudoku.GRID_SIZE; i++) {
-            assertFalse("Column " + i + " should be invalid", invalidSudoku1.isColumnValid(i));
+            assertFalse("Column " + i + " should be invalid", invalidSudoku.isColumnValid(i));
             assertFalse("Column " + i + " should be invalid", validRowsSudoku.isColumnValid(i));
             assertFalse("Column " + i + " should be invalid", all1sSudoku.isColumnValid(i));
             assertTrue("Column " + i + " should be valid", validColumnsSudoku.isColumnValid(i));
@@ -297,7 +297,7 @@ public class SudokuTest {
     public void testIsBoxValid() throws Exception {
         for (int x = 0; x < Sudoku.BOX_SIZE; x++) {
             for (int y = 0; y < Sudoku.BOX_SIZE; y++) {
-                assertFalse("Box " + x + "," + y + " should be invalid", invalidSudoku1.isBoxValid(x, y));
+                assertFalse("Box " + x + "," + y + " should be invalid", invalidSudoku.isBoxValid(x, y));
                 assertFalse("Box " + x + "," + y + " should be invalid", validRowsSudoku.isBoxValid(x, y));
                 assertFalse("Box " + x + "," + y + " should be invalid", validColumnsSudoku.isBoxValid(x, y));
                 assertFalse("Box " + x + "," + y + " should be invalid", all1sSudoku.isBoxValid(x, y));
@@ -305,5 +305,10 @@ public class SudokuTest {
             }
         }
 
+    }
+
+    @Test
+    public void testToString() throws Exception {
+        assertEquals("Sudoku strings do not match", testSudokuString, invalidSudoku.toString());
     }
 }

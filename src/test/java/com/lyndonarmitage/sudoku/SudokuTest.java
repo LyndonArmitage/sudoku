@@ -271,10 +271,19 @@ public class SudokuTest {
         logger.info("\n{}", sudoku.toString());
     }
 
-    @Ignore
     @Test
     public void testCanPutAbsolute() throws Exception {
-
+        for (int y = 0; y < Sudoku.GRID_SIZE; y++) {
+            for (int x = 0; x < Sudoku.GRID_SIZE; x++) {
+                int value = testArrayCompleted[y][x];
+                if (testArray[y][x] != 0) {
+                    assertFalse(invalidSudoku.canPutAbsolute(x, y, value));
+                    continue;
+                }
+                assertTrue("Problem placing " + value + " at " + x + "," + y, invalidSudoku.canPutAbsolute(x, y, value));
+                assertFalse(all1sSudoku.canPutAbsolute(x, y, 2));
+            }
+        }
     }
 
     @Ignore
@@ -359,9 +368,9 @@ public class SudokuTest {
         int[][] expected2 = new int[3][3];
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                expected1[x][y] = testArray[y][x];
-                expected2[x][y] = testArrayCompleted[y][x];
-                // not sure of correct
+                expected1[x][y] = testArray[x][y];
+                expected2[x][y] = testArrayCompleted[x][y];
+                // not sure if correct
             }
         }
         assertArrayEquals(expected1, invalidSudoku.getBox(0, 0));

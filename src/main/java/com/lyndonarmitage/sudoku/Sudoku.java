@@ -375,7 +375,7 @@ public class Sudoku {
         for (int x = 0; x < BOX_SIZE; x++) {
             for (int y = 0; y < BOX_SIZE; y++) {
                 int value = getRelative(boxX, boxY, x, y);
-                box[x][y] = value;
+                box[y][x] = value; // fixed box being returned on its side when compared to toString
             }
         }
         return box;

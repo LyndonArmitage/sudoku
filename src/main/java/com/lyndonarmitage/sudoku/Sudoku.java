@@ -233,7 +233,20 @@ public class Sudoku {
         return this.grid[x][y];
     }
 
-    private int convertRelativeToAbsolute(int box, int rel) {
+    /**
+     * Converts a relative box coordinate and relative cell coordinate to absolute coordinate. <br />
+     * For example:
+     * <pre>
+     * int absX = convertRelativeToAbsolute(boxX, relX);
+     * int absY = convertRelativeToAbsolute(boxY, relY);
+     * getAbsolute(absX, absY) == getRelative(boxX, boxY, relX, relY) // true
+     * </pre>
+     *
+     * @param box box value
+     * @param rel relative cell value
+     * @return absolute vale
+     */
+    public static int convertRelativeToAbsolute(int box, int rel) {
         return rel + (box * BOX_SIZE);
     }
 

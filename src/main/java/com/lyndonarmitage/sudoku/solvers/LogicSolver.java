@@ -67,6 +67,7 @@ public class LogicSolver implements SudokuSolver {
                 // sudoku has been solved
                 break;
             }
+            lastChanges = candidateLines(sudoku, lastChanges);
 
 
         } while (lastChanges > 0);
@@ -118,6 +119,32 @@ public class LogicSolver implements SudokuSolver {
                     mark = new PencilMark(sudoku.getAbsolute(x, y));
                     pencilMarks[x][y] = mark;
                 }
+            }
+        }
+        return lastChanges;
+    }
+
+    private int candidateLines(Sudoku sudoku, int lastChanges) throws SudokuException {
+        // see https://www.sudokuoftheday.com/techniques/candidate-lines/ for details
+        for (int boxX = 0; boxX < Sudoku.BOX_COUNT; boxX++) {
+            for (int boxY = 0; boxY < Sudoku.BOX_COUNT; boxY++) {
+                int[][] box = sudoku.getBox(boxX, boxY);
+                PencilMark[][] boxPencilMarks = new PencilMark[Sudoku.BOX_SIZE][Sudoku.BOX_SIZE];
+                for (int relX = 0; relX < Sudoku.BOX_SIZE; relX++) {
+                    for (int relY = 0; relY < Sudoku.BOX_SIZE; relY++) {
+                        int x = Sudoku.convertRelativeToAbsolute(boxX, relX);
+                        int y = Sudoku.convertRelativeToAbsolute(boxY, relY);
+                        int value = box[relX][relY];
+                        PencilMark mark = pencilMarks[x][y];
+                        boxPencilMarks[relX][relY] = mark;
+                        if (value == 0) {
+                            // TODO: Complete
+
+                        }
+                    }
+                }
+
+
             }
         }
         return lastChanges;

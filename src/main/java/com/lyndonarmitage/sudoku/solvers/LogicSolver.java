@@ -75,7 +75,7 @@ public class LogicSolver implements SudokuSolver {
                         if (!present.contains(value) && sudoku.canPutAbsolute(x, y, value)) {
                             lastChanges++;
                             sudoku.setAbsolute(x, y, value);
-                            logger.info("Setting value at {},{} to {}", x, y, value);
+                            logger.debug("Setting value at {},{} to {}", x, y, value);
                         }
                     }
                 }
@@ -84,6 +84,6 @@ public class LogicSolver implements SudokuSolver {
         if (sudoku.getHints() < 81) {
             logger.warn("Couldn't completely finish Sudoku, {} incomplete sections.", (81 - sudoku.getHints()));
         }
-        logger.info("Took {}ms", System.currentTimeMillis() - startTime);
+        logger.debug("Took {}ms", System.currentTimeMillis() - startTime);
     }
 }

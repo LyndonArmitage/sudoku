@@ -325,16 +325,74 @@ public class Sudoku {
         return (count >= GRID_SIZE);
     }
 
+    /**
+     * Check to make sure that the given x and y isn't occupied.
+     *
+     * @param x absolute x
+     * @param y absolute y
+     * @return false if that part of the grid is occupied
+     */
+    public boolean canPutAbsolute(int x, int y) {
+        // TODO: Add test
+        return this.grid[x][y] == 0;
+    }
+
+    /**
+     * Check to make sure a given x and y isn't occupied <b>and</b> that you can place the desired value there
+     *
+     * @param x     absolute x
+     * @param y     absolute y
+     * @param value value to place there
+     * @return false if the space is occupied or putting the value there is an invalid move
+     */
     public boolean canPutAbsolute(int x, int y, int value) {
-        // TODO: Add can put value here checker
-        throw new RuntimeException("Not implemented yet");
+        // TODO: Add test
+        if (canPutAbsolute(x, y)) {
+            throw new RuntimeException("Not yet implemented");
+        } else {
+            return false;
+        }
     }
 
-    public boolean canPutRelative(int boxX, int boxY, int relX, int relY, int value) {
-        // TODO: Add can put value here (relative) checker
-        throw new RuntimeException("Not implemented yet");
+    /**
+     * Check to make sure that the given relative position isn't occupied.
+     *
+     * @param boxX Box x (0,1,2)
+     * @param boxY Box y (0,1,2)
+     * @param relX The relative x within the box
+     * @param relY The relative y within the box
+     * @return false if the position is occupied
+     * @throws SudokuException
+     */
+    public boolean canPutRelative(int boxX, int boxY, int relX, int relY) throws SudokuException {
+        // TODO: Add test
+        return getRelative(boxX, boxY, relX, relY) == 0;
     }
 
+    /**
+     * Check to make sure that the given relative position isn't occupied <b>and</b> that you can place the given value there
+     *
+     * @param boxX  Box x (0,1,2)
+     * @param boxY  Box y (0,1,2)
+     * @param relX  The relative x within the box
+     * @param relY  The relative y within the box
+     * @param value The value to place there
+     * @return false if the position is occupied or placing value there is an invalid move
+     * @throws SudokuException
+     */
+    public boolean canPutRelative(int boxX, int boxY, int relX, int relY, int value) throws SudokuException {
+        // TODO: Add test
+        if (canPutRelative(boxX, boxY, relX, relY)) {
+            throw new RuntimeException("Not yet implemented");
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return true if the Sudoku is valid
+     * @throws SudokuException
+     */
     public boolean isValid() throws SudokuException {
         for (int y = 0; y < GRID_SIZE; y++) {
             if (!isRowValid(y)) {
@@ -349,7 +407,7 @@ public class Sudoku {
         // Not sure if this check is really needed
         for (int x = 0; x < BOX_SIZE; x++) {
             for (int y = 0; y < BOX_SIZE; y++) {
-                if(!isBoxValid(x, y)) {
+                if (!isBoxValid(x, y)) {
                     return false;
                 }
             }
@@ -357,6 +415,10 @@ public class Sudoku {
         return true;
     }
 
+    /**
+     * @param row row to check
+     * @return true if the row is valid
+     */
     public boolean isRowValid(int row) {
         Set<Integer> set = new HashSet<>(9);
         for (int x = 0; x < GRID_SIZE; x++) {
@@ -369,6 +431,10 @@ public class Sudoku {
         return set.size() == 9;
     }
 
+    /**
+     * @param column column to check
+     * @return true if the column is valid
+     */
     public boolean isColumnValid(int column) {
         Set<Integer> set = new HashSet<>(9);
         for (int y = 0; y < GRID_SIZE; y++) {
@@ -381,6 +447,12 @@ public class Sudoku {
         return set.size() == 9;
     }
 
+    /**
+     * @param boxX Box x (0,1,2)
+     * @param boxY Box y (0,1,2)
+     * @return true if the box is valid
+     * @throws SudokuException
+     */
     public boolean isBoxValid(int boxX, int boxY) throws SudokuException {
         testRelative(boxX, boxY, 0, 0);
         Set<Integer> set = new HashSet<>(9);

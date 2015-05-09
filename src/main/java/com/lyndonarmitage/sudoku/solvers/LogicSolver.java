@@ -62,11 +62,30 @@ public class LogicSolver implements SudokuSolver {
         do {
             lastChanges = 0;
             // perform basic logical steps
-            for (int x = 0; x < 9; x++) {
-                int[] column = sudoku.getColumn(x);
-                for (int y = 0; y < 9; y++) {
-                    PencilMark mark = pencilMarks[x][y];
-                    if (sudoku.getAbsolute(x, y) == 0) {
+            lastChanges = runBasicLogicSolution(sudoku, lastChanges);
+            if (sudoku.getHints() >= 81) {
+                // sudoku has been solved
+                break;
+            }
+
+
+        } while (lastChanges > 0);
+        if (sudoku.getHints() < 81) {
+            logger.warn("Couldn't completely finish Sudoku, {} incomplete sections.", (81 - sudoku.getHints()));
+        }
+        logger.debug("Took {}ms", System.currentTimeMillis() - startTime);
+    }
+
+    private int runBasicLogicSolution(Sudoku sudoku, int lastChanges) throws SudokuException {
+        for (int x = 0; x < 9; x++) {
+            int[] column = sudoku.getColumn(x);
+            for (int y = 0; y < 9; y++) {
+                PencilMark mark = pencilMarks[x][y];
+                if (sudoku.getAbsolute(x, y) == 0) {
+                    if (mark.getRealValue() > 0) {
+                        sudoku.setAbsolute(x, y, mark.getRealValue());
+                        lastChanges++;
+                    } else {
                         int[] row = sudoku.getRow(y);
 
                         // remove all the ones already present
@@ -93,18 +112,15 @@ public class LogicSolver implements SudokuSolver {
                                 lastChanges++;
                             }
                         }
-                        // at this point we have covered the basics in the same way SimpleLogicSolver does
-                    } else if (mark.size() > 1) {
-                        mark = new PencilMark(sudoku.getAbsolute(x, y));
-                        pencilMarks[x][y] = mark;
                     }
+                    // at this point we have covered the basics in the same way SimpleLogicSolver does
+                } else if (mark.size() > 1) {
+                    mark = new PencilMark(sudoku.getAbsolute(x, y));
+                    pencilMarks[x][y] = mark;
                 }
             }
-        } while (lastChanges > 0);
-        if (sudoku.getHints() < 81) {
-            logger.warn("Couldn't completely finish Sudoku, {} incomplete sections.", (81 - sudoku.getHints()));
         }
-        logger.debug("Took {}ms", System.currentTimeMillis() - startTime);
+        return lastChanges;
     }
 
     /**
@@ -113,7 +129,7 @@ public class LogicSolver implements SudokuSolver {
      * @param sudoku The sudoku to solve
      * @throws SudokuException
      */
-    public void initPencilMarks(Sudoku sudoku) throws SudokuException {
+    private void initPencilMarks(Sudoku sudoku) throws SudokuException {
         pencilMarks = new PencilMark[9][9];
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {

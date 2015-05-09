@@ -3,6 +3,7 @@ package com.lyndonarmitage.sudoku.tools;
 import com.lyndonarmitage.sudoku.Sudoku;
 import com.lyndonarmitage.sudoku.SudokuException;
 import com.lyndonarmitage.sudoku.SudokuSolver;
+import com.lyndonarmitage.sudoku.solvers.LogicSolver;
 import com.lyndonarmitage.sudoku.solvers.SimpleLogicSolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class BatchTester {
      * @param args <ul>
      *             <li>arg[0] is the folder the sudokus are in</li>
      *             <li>arg[1] is the optional file pattern to use to only process certain files (e.g."\d+\.sudoku.txt")</li>
-     *             <li>arg[2] is the optional option of which solver to use, currently only supports "logic"</li>
+     *             <li>arg[2] is the optional option of which solver to use, currently only supports "simple" and "logic"</li>
      *             </ul>
      */
     public static void main(String[] args) {
@@ -42,16 +43,20 @@ public class BatchTester {
         SudokuSolver solver = null;
         if (args.length >= 3) {
             switch (args[2].toLowerCase()) {
-                case "logic":
-                    logger.info("Using logic solver");
+                case "simple":
+                    logger.info("Using simple logic solver");
                     solver = new SimpleLogicSolver();
                     break;
+                case "logic":
+                    logger.info("Using logic solver");
+                    solver = new LogicSolver();
+                    break;
                 default:
-                    logger.warn("Using default logic solver");
+                    logger.warn("Using default simple  logic solver");
                     solver = new SimpleLogicSolver();
             }
         } else {
-            logger.warn("Using default logic solver");
+            logger.warn("Using default simple  logic solver");
             solver = new SimpleLogicSolver();
         }
 

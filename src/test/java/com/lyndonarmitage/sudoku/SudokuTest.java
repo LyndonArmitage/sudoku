@@ -85,8 +85,8 @@ public class SudokuTest {
         validRowsSudoku = new Sudoku();
         validColumnsSudoku = new Sudoku();
         all1sSudoku = new Sudoku();
-        for(int y = 0; y < Sudoku.GRID_SIZE; y++) {
-            for(int x = 0; x < Sudoku.GRID_SIZE; x++) {
+        for (int y = 0; y < Sudoku.GRID_SIZE; y++) {
+            for (int x = 0; x < Sudoku.GRID_SIZE; x++) {
                 validRowsSudoku.setAbsolute(x, y, x + 1);
                 validColumnsSudoku.setAbsolute(x, y, y + 1);
                 all1sSudoku.setAbsolute(x, y, 1);
@@ -131,6 +131,26 @@ public class SudokuTest {
 
         // TODO: Add test for out of bounds
         logger.info("\n{}", sudoku.toString());
+    }
+
+
+    @Test
+    public void testSetAbsolute() throws Exception {
+        Sudoku sudoku = new Sudoku();
+        for (int x = 0; x < Sudoku.GRID_SIZE; x++) {
+            for (int y = 0; y < Sudoku.GRID_SIZE; y++) {
+                sudoku.setAbsolute(x, y, x + 1);
+            }
+        }
+    }
+
+    @Test
+    public void testGetAbsolute() throws Exception {
+        for (int x = 0; x < Sudoku.GRID_SIZE; x++) {
+            for (int y = 0; y < Sudoku.GRID_SIZE; y++) {
+                assertEquals("Get value not correct", testArrayCompleted[y][x], validSudoku.getAbsolute(x, y));
+            }
+        }
     }
 
     @Test

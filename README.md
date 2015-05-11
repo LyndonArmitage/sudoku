@@ -1,5 +1,7 @@
 # Sudoku Solver #
 
+[![Build Status](https://travis-ci.org/LyndonArmitage/sudoku.svg?branch=master)](https://travis-ci.org/LyndonArmitage/sudoku)
+
 This is a simple implementation of a Sudoku solver in Java by Lyndon Armitage.
 
 It requires Maven and Java 8 to build. 
